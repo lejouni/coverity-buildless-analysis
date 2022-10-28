@@ -62,7 +62,7 @@ inputs:
   cov_capture_source:
     description: Source folder where capture will be started or SCM URL
     required: false
-    default: .
+    default: ${{github.workspace}}
   cov_capture_params:
     description: Additional parameters for cov-capture phase
     required: false
