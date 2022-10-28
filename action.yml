@@ -1,3 +1,6 @@
+#TODO:  - Add support for incremental analysis by using cov-run-desktop command. (separate action?)
+#       - Add support for project and stream creation if not exists (separate action?)
+#       - Add support for sarif -format report (separate action?)
 name: "Coverity Analsysis by using cov-capture as capture command."
 description: "Will analyze the source code with Coverity Connect."
 author: Jouni Lehto
@@ -6,13 +9,13 @@ branding:
   color: blue
 inputs:
   project:
-    description: Coverity Connect project name. If not given, then using github.repository as a default
+    description: Coverity Connect project name. If not given, then using env.project as a default
     required: false
-    default: ${{github.repository}}
+    default: ${{env.project}}
   stream:
-    description: Coverity Connect project stream name. If not given, then using github.ref_name as a default
+    description: Coverity Connect project stream name. If not given, then using env.stream as a default
     required: false
-    default: ${{github.ref_name}}
+    default: ${{env.stream}}
   cov_username:
     description: Coverity Connect username
     required: true
