@@ -1,0 +1,107 @@
+name: "Coverity Analsysis by using cov-capture as capture command."
+description: "Will analyze the source code with Coverity Connect."
+author: Jouni Lehto
+branding:
+  icon: code
+  color: blue
+inputs:
+  project:
+    description: Coverity Connect project name. If not given, then using github.repository as a default
+    required: false
+    default: ${{github.repository}}
+  stream:
+    description: Coverity Connect project stream name. If not given, then using github.ref_name as a default
+    required: false
+    default: ${{github.ref_name}}
+  cov_username:
+    description: Coverity Connect username
+    required: true
+  cov_password:
+    description: Coverity Connect password
+    required: true
+  cov_url:
+    description: URL for Coverity Connect where the analysis tar file can be downloaded
+    required: true
+  cov_installation_dir:
+    description: Place where coverity commands are found. Ex. /coverity/bin/. Not required if Coverity tools are in PATH.
+    required: false
+  intermediate_dir:
+    description: Itermediate directory. default=github.workspace/idir
+    required: false
+    default: ${{github.workspace}}/idir
+  log_level:
+    description: Logging level
+    default: DEBUG
+    required: false
+  teams_webhook_url:
+    description: Microsoft Teams WebHook URL. By giving this, the Teams notification is activated
+    required: false
+  force_commit:
+    description: Setting this true, it will do the commit and will not do any checkings.
+    default: "false"
+    required: false
+  dryrun:
+    description: Set this true, if you want to run tests and not to do the commit.
+    default: "false"
+    required: false
+  break_build:
+    description: Set this true, if you want to break the build, if there are new findings.
+    default: "false"
+    required: false
+  emit_threshold:
+    description: With this you can set the emit threshold, the default is 95
+    default: '95'
+    required: false
+  viewID:
+    description: ID of that view which result is used to get findings
+    required: false
+  cov_capture_mode:
+    description: Which cov-capture mode is used. Options are project, scm, source (default) and config
+    required: false
+    default: source
+  cov_capture_source:
+    description: Source folder where capture will be started or SCM URL
+    required: false
+    default: .
+  cov_capture_params:
+    description: Additional parameters for cov-capture phase
+    required: false
+  cov_analysis_params:
+    description: Additional parameters for cov-analyze phase
+    required: false
+    default: --webapp-security --security --strip-path=${{github.workspace}} -en HARDCODED_CREDENTIALS
+
+runs:
+  using: composite
+  steps:
+    # First step is to run the Coverity capture phase with cov-build
+    - name: Capture phase with SCM mode
+      if: ${{inputs.cov_capture_mode == 'scm'}}
+      run: cov-capture --dir ${{inputs.intermediate_dir}} ${{inputs.cov_capture_params}} --scm-url=${{inputs.cov_capture_source}}
+      shell: bash
+    - name: Capture phase with Project mode
+      if: ${{inputs.cov_capture_mode != 'scm'}}
+      run: cov-capture --dir ${{inputs.intermediate_dir}} ${{inputs.cov_capture_params}} --${{inputs.cov_capture_mode}}-dir=${{inputs.cov_capture_source}}
+      shell: bash
+    # Second phase is to run the Coverity Analysis
+    - run: cov-analyze --dir ${{inputs.intermediate_dir}} ${{inputs.cov_analysis_params}}
+      shell: bash
+    # Third phase is the commit and that is done with coverity-commit-checker -action.
+    - name: Coverity Commit phase
+      uses: lejouni/coverity-commit-checker@v5
+      with:
+        project: ${{inputs.project}}
+        stream: ${{inputs.stream}}
+        cov_username: ${{inputs.cov_username}}
+        cov_password: ${{inputs.cov_password}}
+        cov_url: ${{inputs.cov_url}}
+        intermediate_dir: ${{inputs.intermediate_dir}}
+        cov_installation_dir: ${{inputs.cov_installation_dir}}
+        log_level: ${{inputs.log_level}}
+        teams_webhook_url: ${{inputs.teams_webhook_url}}
+        force_commit: ${{inputs.force_commit}}
+        dryrun: ${{inputs.dryrun}}
+        break_build: ${{inputs.break_build}}
+        emit_threshold: ${{inputs.emit_threshold}}
+        viewID: ${{inputs.viewID}}
+
