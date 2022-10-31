@@ -23,7 +23,7 @@ inputs:
   cov_url:
     description: URL for Coverity Connect where the analysis tar file can be downloaded
     required: true
-  cov_installation_dir:
+  cov_install_folder:
     description: Place where coverity commands are found. Ex. /coverity/bin/. Not required if Coverity tools are in PATH.
     required: false
   intermediate_dir:
@@ -108,7 +108,7 @@ runs:
       shell: bash
     # Fourth phase is the commit and that is done with coverity-commit-checker -action.
     - name: Coverity Commit phase
-      uses: lejouni/coverity-commit-checker@v5.4
+      uses: lejouni/coverity-commit-checker@v5.5
       with:
         project: ${{env.project}}
         stream: ${{env.stream}}
@@ -116,7 +116,7 @@ runs:
         cov_password: ${{env.cov_password}}
         cov_url: ${{env.cov_url}}
         intermediate_dir: ${{inputs.intermediate_dir}}
-        cov_installation_dir: ${{env.cov_installation_dir}}
+        cov_install_folder: ${{env.cov_install_folder}}
         log_level: ${{inputs.log_level}}
         teams_webhook_url: ${{inputs.teams_webhook_url}}
         force_commit: ${{inputs.force_commit}}
