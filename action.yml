@@ -81,17 +81,17 @@ runs:
   using: composite
   steps:
     # First step is to run the Coverity capture phase with cov-build
-    - name: Capture phase with SCM mode
-      if: ${{inputs.cov_capture_mode == 'scm'}}
-      run: cov-capture --dir ${{inputs.intermediate_dir}} ${{inputs.cov_capture_params}} --scm-url=${{inputs.cov_capture_source}}
-      shell: bash
-    - name: Capture phase with Project mode
-      if: ${{inputs.cov_capture_mode != 'scm'}}
-      run: cov-capture --dir ${{inputs.intermediate_dir}} ${{inputs.cov_capture_params}} --${{inputs.cov_capture_mode}}-dir=${{inputs.cov_capture_source}}
-      shell: bash
-    # Second phase is to run the Coverity Analysis
-    - run: cov-analyze --dir ${{inputs.intermediate_dir}} ${{inputs.cov_analysis_params}}
-      shell: bash
+    # - name: Capture phase with SCM mode
+    #   if: ${{inputs.cov_capture_mode == 'scm'}}
+    #   run: cov-capture --dir ${{inputs.intermediate_dir}} ${{inputs.cov_capture_params}} --scm-url=${{inputs.cov_capture_source}}
+    #   shell: bash
+    # - name: Capture phase with Project mode
+    #   if: ${{inputs.cov_capture_mode != 'scm'}}
+    #   run: cov-capture --dir ${{inputs.intermediate_dir}} ${{inputs.cov_capture_params}} --${{inputs.cov_capture_mode}}-dir=${{inputs.cov_capture_source}}
+    #   shell: bash
+    # # Second phase is to run the Coverity Analysis
+    # - run: cov-analyze --dir ${{inputs.intermediate_dir}} ${{inputs.cov_analysis_params}}
+    #   shell: bash
     - run: echo "${{env.project}} - ${{inputs.project}}"
       shell: bash
     # Third phase is the commit and that is done with coverity-commit-checker -action.
