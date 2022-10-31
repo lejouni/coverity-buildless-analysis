@@ -11,11 +11,11 @@ inputs:
   project:
     description: Coverity Connect project name. If not given, then using project from environment variables as a default
     required: false
-    default: ${{env.project}}
+    default: ${{github.env.project}}
   stream:
     description: Coverity Connect project stream name. If not given, then using stream from environment variables as a default
     required: false
-    default: ${{env.stream}}
+    default: ${{github.env.stream}}
   cov_username:
     description: Coverity Connect username
     required: true
@@ -91,7 +91,7 @@ runs:
       shell: bash
     # Third phase is the commit and that is done with coverity-commit-checker -action.
     - name: Coverity Commit phase
-      uses: lejouni/coverity-commit-checker@v5.2
+      uses: lejouni/coverity-commit-checker@v5.3
       with:
         project: ${{inputs.project}}
         stream: ${{inputs.stream}}
