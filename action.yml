@@ -97,7 +97,6 @@ runs:
     # Third phase is the commit and that is done with coverity-commit-checker -action.
     - name: Coverity Commit phase
       uses: lejouni/coverity-commit-checker@v5.4
-      env:
       with:
         project: ${{inputs.project}}
         stream: ${{inputs.stream}}
