@@ -92,6 +92,7 @@ runs:
     # Second phase is to run the Coverity Analysis
     - run: cov-analyze --dir ${{inputs.intermediate_dir}} ${{inputs.cov_analysis_params}}
       shell: bash
+    - run: echo "${{github.env.project}} - ${{inputs.project}}"
     # Third phase is the commit and that is done with coverity-commit-checker -action.
     - name: Coverity Commit phase
       uses: lejouni/coverity-commit-checker@v5.4
