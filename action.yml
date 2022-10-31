@@ -18,16 +18,19 @@ inputs:
     default: ${{github.env.stream}}
   cov_username:
     description: Coverity Connect username
-    required: true
+    required: false
+    default: ${{github.env.cov_username}}
   cov_password:
     description: Coverity Connect password
-    required: true
+    required: false
+    default: ${{github.env.cov_password}}
   cov_url:
     description: URL for Coverity Connect where the analysis tar file can be downloaded
     required: true
   cov_installation_dir:
     description: Place where coverity commands are found. Ex. /coverity/bin/. Not required if Coverity tools are in PATH.
     required: false
+    default: ${{github.env.cov_installation_dir}}
   intermediate_dir:
     description: Itermediate directory. default=github.workspace/idir
     required: false
