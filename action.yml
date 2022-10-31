@@ -11,26 +11,21 @@ inputs:
   project:
     description: Coverity Connect project name. If not given, then using project from environment variables as a default
     required: false
-    default: ${{github.env.project}}
   stream:
     description: Coverity Connect project stream name. If not given, then using stream from environment variables as a default
     required: false
-    default: ${{github.env.stream}}
   cov_username:
     description: Coverity Connect username
     required: false
-    default: ${{github.env.cov_username}}
   cov_password:
     description: Coverity Connect password
     required: false
-    default: ${{github.env.cov_password}}
   cov_url:
     description: URL for Coverity Connect where the analysis tar file can be downloaded
     required: true
   cov_installation_dir:
     description: Place where coverity commands are found. Ex. /coverity/bin/. Not required if Coverity tools are in PATH.
     required: false
-    default: ${{github.env.cov_installation_dir}}
   intermediate_dir:
     description: Itermediate directory. default=github.workspace/idir
     required: false
@@ -81,30 +76,47 @@ runs:
   using: composite
   steps:
     # First step is to run the Coverity capture phase with cov-build
-    # - name: Capture phase with SCM mode
-    #   if: ${{inputs.cov_capture_mode == 'scm'}}
-    #   run: cov-capture --dir ${{inputs.intermediate_dir}} ${{inputs.cov_capture_params}} --scm-url=${{inputs.cov_capture_source}}
-    #   shell: bash
-    # - name: Capture phase with Project mode
-    #   if: ${{inputs.cov_capture_mode != 'scm'}}
-    #   run: cov-capture --dir ${{inputs.intermediate_dir}} ${{inputs.cov_capture_params}} --${{inputs.cov_capture_mode}}-dir=${{inputs.cov_capture_source}}
-    #   shell: bash
-    # # Second phase is to run the Coverity Analysis
-    # - run: cov-analyze --dir ${{inputs.intermediate_dir}} ${{inputs.cov_analysis_params}}
-    #   shell: bash
-    - run: echo "${{env.project}} - ${{inputs.project}}"
+    - name: Capture phase with SCM mode
+      if: ${{inputs.cov_capture_mode == 'scm'}}
+      run: cov-capture --dir ${{inputs.intermediate_dir}} ${{inputs.cov_capture_params}} --scm-url=${{inputs.cov_capture_source}}
       shell: bash
-    # Third phase is the commit and that is done with coverity-commit-checker -action.
+    - name: Capture phase with Project mode
+      if: ${{inputs.cov_capture_mode != 'scm'}}
+      run: cov-capture --dir ${{inputs.intermediate_dir}} ${{inputs.cov_capture_params}} --${{inputs.cov_capture_mode}}-dir=${{inputs.cov_capture_source}}
+      shell: bash
+    # Second phase is to run the Coverity Analysis
+    - run: cov-analyze --dir ${{inputs.intermediate_dir}} ${{inputs.cov_analysis_params}}
+      shell: bash
+    # Third step is to check that if following inputs are given then setting them as env variable
+    - run: |
+        if [ ! -z ${{inputs.cov_url}} ]
+        then
+          echo "cov_url=${{inputs.cov_url}}" >> $GITHUB_ENV
+        fi
+        if [ ! -z ${{inputs.cov_username}} ]
+        then
+          echo "cov_username=${{inputs.cov_username}}" >> $GITHUB_ENV
+        fi
+        if [ ! -z ${{inputs.cov_password}} ]
+        then
+          echo "cov_password=${{inputs.cov_password}}" >> $GITHUB_ENV
+        fi
+        if [ ! -z ${{inputs.cov_install_folder}} ]
+        then
+          echo "cov_install_folder=${{inputs.cov_install_folder}}" >> $GITHUB_ENV
+        fi
+      shell: bash
+    # Fourth phase is the commit and that is done with coverity-commit-checker -action.
     - name: Coverity Commit phase
       uses: lejouni/coverity-commit-checker@v5.4
       with:
-        project: ${{inputs.project}}
-        stream: ${{inputs.stream}}
-        cov_username: ${{inputs.cov_username}}
-        cov_password: ${{inputs.cov_password}}
-        cov_url: ${{inputs.cov_url}}
+        project: ${{env.project}}
+        stream: ${{env.stream}}
+        cov_username: ${{env.cov_username}}
+        cov_password: ${{env.cov_password}}
+        cov_url: ${{env.cov_url}}
         intermediate_dir: ${{inputs.intermediate_dir}}
-        cov_installation_dir: ${{inputs.cov_installation_dir}}
+        cov_installation_dir: ${{env.cov_installation_dir}}
         log_level: ${{inputs.log_level}}
         teams_webhook_url: ${{inputs.teams_webhook_url}}
         force_commit: ${{inputs.force_commit}}
