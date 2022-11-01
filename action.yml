@@ -23,9 +23,6 @@ inputs:
   cov_url:
     description: URL for Coverity Connect where the analysis tar file can be downloaded
     required: true
-  cov_install_folder:
-    description: Place where coverity commands are found. Ex. /coverity/bin/. Not required if Coverity tools are in PATH.
-    required: false
   intermediate_dir:
     description: Itermediate directory. default=github.workspace/idir
     required: false
@@ -100,10 +97,6 @@ runs:
         if [ ! -z ${{inputs.cov_password}} ]
         then
           echo "cov_password=${{inputs.cov_password}}" >> $GITHUB_ENV
-        fi
-        if [ ! -z ${{inputs.cov_install_folder}} ]
-        then
-          echo "cov_install_folder=${{inputs.cov_install_folder}}" >> $GITHUB_ENV
         fi
       shell: bash
     # Fourth phase is the commit and that is done with coverity-commit-checker -action.
