@@ -75,7 +75,7 @@ runs:
       run: cov-format-errors --dir ${{env.cov_intermediate_dir}} --json-output-v10 ${{github.workspace}}/coverity_results.json
       shell: bash
     - if: ${{env.cov_output_format == 'sarif' }}
-      uses: lejouni/coverity-sarif-formatter@v0.1.0
+      uses: lejouni/coverity-sarif-formatter@v0.1.1
       with:
         log_level: ${{inputs.log_level}}
         inputfile: ${{github.workspace}}/coverity_results.json
