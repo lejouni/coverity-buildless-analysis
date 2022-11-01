@@ -80,7 +80,6 @@ runs:
         log_level: ${{inputs.log_level}}
         inputfile: ${{github.workspace}}/coverity_results.json
         outputfile: ${{env.cov_output}}
-      shell: bash
     # Commit and that is done with coverity-commit-checker -action.
     - name: Coverity Commit phase
       uses: lejouni/coverity-commit-checker@v5.6.1
