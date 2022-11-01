@@ -1,5 +1,4 @@
 #TODO:  - Add support for incremental analysis by using cov-run-desktop command. (separate action?)
-#       - Add support for sarif -format report (separate action?)
 name: "Coverity Analsysis by using cov-capture as capture command."
 description: "Will analyze the source code with Coverity Connect."
 author: Jouni Lehto
@@ -82,7 +81,7 @@ runs:
         outputfile: ${{env.cov_output}}
     # Commit and that is done with coverity-commit-checker -action.
     - name: Coverity Commit phase
-      uses: lejouni/coverity-commit-checker@v5.6.1
+      uses: lejouni/coverity-commit-checker@v5.6.2
       with:
         project: ${{env.project}}
         stream: ${{env.stream}}
