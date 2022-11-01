@@ -69,7 +69,7 @@ runs:
       run: cov-format-errors --dir ${{env.cov_intermediate_dir}} --json-output-v10 ${{env.cov_output}}
       shell: bash
     - if: ${{env.cov_output_format == 'html' }}
-      run: cov-format-errors --dir ${{env.cov_intermediate_dir}} --html ${{env.cov_output}}
+      run: cov-format-errors --dir ${{env.cov_intermediate_dir}} --html-output ${{env.cov_output}}
       shell: bash
     - if: ${{env.cov_output_format == 'sarif' }}
       run: cov-format-errors --dir ${{env.cov_intermediate_dir}} --json-output-v10 ${{github.workspace}}/coverity_results.json
