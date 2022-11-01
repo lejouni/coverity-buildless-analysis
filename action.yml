@@ -116,7 +116,6 @@ runs:
         cov_password: ${{env.cov_password}}
         cov_url: ${{env.cov_url}}
         intermediate_dir: ${{inputs.intermediate_dir}}
-        cov_install_folder: ${{env.cov_install_folder}}
         log_level: ${{inputs.log_level}}
         teams_webhook_url: ${{inputs.teams_webhook_url}}
         force_commit: ${{inputs.force_commit}}
