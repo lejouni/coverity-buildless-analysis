@@ -53,7 +53,7 @@ inputs:
 runs:
   using: composite
   steps:
-    # First step is to run the Coverity capture phase with cov-build
+    # Run the Coverity capture phase with cov-build
     - name: Capture phase with SCM mode
       if: ${{inputs.cov_capture_mode == 'scm'}}
       run: cov-capture --dir ${{env.cov_intermediate_dir}} ${{inputs.cov_capture_params}} --scm-url=${{inputs.cov_capture_source}}
@@ -62,10 +62,26 @@ runs:
       if: ${{inputs.cov_capture_mode != 'scm'}}
       run: cov-capture --dir ${{env.cov_intermediate_dir}} ${{inputs.cov_capture_params}} --${{inputs.cov_capture_mode}}-dir=${{inputs.cov_capture_source}}
       shell: bash
-    # Second phase is to run the Coverity Analysis
+    # Run the Coverity Analysis
     - run: cov-analyze --dir ${{env.cov_intermediate_dir}} ${{inputs.cov_analysis_params}}
       shell: bash
-    # Fourth phase is the commit and that is done with coverity-commit-checker -action.
+    - if: ${{env.cov_output_format == 'json' }}
+      run: cov-format-errors --dir ${{env.cov_intermediate_dir}} --json-output-v10 ${{env.cov_output}}
+      shell: bash
+    - if: ${{env.cov_output_format == 'html' }}
+      run: cov-format-errors --dir ${{env.cov_intermediate_dir}} --html ${{env.cov_output}}
+      shell: bash
+    - if: ${{env.cov_output_format == 'sarif' }}
+      run: cov-format-errors --dir ${{env.cov_intermediate_dir}} --json-output-v10 ${{github.workspace}}/coverity_results.json
+      shell: bash
+    - if: ${{env.cov_output_format == 'sarif' }}
+      uses: lejouni/coverity-sarif-formatter@v0.1.0
+      with:
+        log_level: ${{inputs.log_level}}
+        inputfile: ${{github.workspace}}/coverity_results.json
+        outputfile: ${{env.cov_output}}
+      shell: bash
+    # Commit and that is done with coverity-commit-checker -action.
     - name: Coverity Commit phase
       uses: lejouni/coverity-commit-checker@v5.6.1
       with:
