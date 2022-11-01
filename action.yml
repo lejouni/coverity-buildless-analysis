@@ -64,10 +64,11 @@ inputs:
   cov_capture_params:
     description: Additional parameters for cov-capture phase
     required: false
+    default: --no-security-da
   cov_analysis_params:
     description: Additional parameters for cov-analyze phase
     required: false
-    default: --webapp-security --security --strip-path=${{github.workspace}} -en HARDCODED_CREDENTIALS --no-security-da
+    default: --webapp-security --security --strip-path=${{github.workspace}} -en HARDCODED_CREDENTIALS
 
 runs:
   using: composite
