@@ -78,6 +78,7 @@ runs:
       shell: bash
     - if: ${{inputs.cov_analysis_mode == 'incremental'}}
       run: |
+        ${{github.api_url}}
         export mod_files=$(curl -H "Accept: application/vnd.github+json" -H "Authorization: Bearer ${{inputs.github_access_token}}" ${{github.api_url}}/${{github.repository}}/commits/${{github.sha}} | jq .files | jq -r '.[] | .filename' | tr "\r\n" " ")
         if [ -z $mod_files ]; then echo "No changed files that pass the filter. Exiting"; exit 0; fi
         cov-run-desktop --dir ${{env.cov_intermediate_dir}} ${{inputs.cov_incremental_analysis_params}} --url="${{env.cov_url}}" --stream="${{env.stream}}" --user="${{env.cov_username}}" --password="${{env.cov_password}}" --json-output-v10=${{env.cov_output}} $mod_files
