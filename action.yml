@@ -88,7 +88,7 @@ runs:
     - if: ${{env.cov_output_format == 'html' }}
       run: cov-format-errors --dir ${{env.cov_intermediate_dir}} --html-output ${{env.cov_output}}
       shell: bash
-    - if: ${{env.cov_output_format == 'sarif' && inputs.cov_analysis_mode == 'incremental'}}
+    - if: ${{env.cov_output_format == 'sarif' && inputs.cov_analysis_mode != 'incremental'}}
       run: cov-format-errors --dir ${{env.cov_intermediate_dir}} --json-output-v10 ${{github.workspace}}/coverity_results.json
       shell: bash
     - if: ${{env.cov_output_format == 'sarif' }}
