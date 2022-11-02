@@ -48,6 +48,17 @@ inputs:
     description: Additional parameters for cov-analyze phase
     required: false
     default: --webapp-security --security --strip-path=${{github.workspace}} -en HARDCODED_CREDENTIALS
+  cov_incremental_analysis_params:
+    description: Additional parameters for cov-run-desktop phase
+    required: false
+    default: --set-new-defect-owner false --whole-program --ignore-uncapturable-inputs true --reference-snapshot="latest" --present-in-reference false --webapp-security --security --strip-path=${{github.workspace}} -en HARDCODED_CREDENTIALS
+  cov_analysis_mode:
+    description: Analysis mode will tell the action that is full or incremental analysis requested, Options are full and incremental
+    required: false
+    default: full
+  github_access_token:
+    description: This is required when using incremental analysis mode. This is used to get modified files via Github Api
+    required: false
 
 runs:
   using: composite
@@ -62,15 +73,22 @@ runs:
       run: cov-capture --dir ${{env.cov_intermediate_dir}} ${{inputs.cov_capture_params}} --${{inputs.cov_capture_mode}}-dir=${{inputs.cov_capture_source}}
       shell: bash
     # Run the Coverity Analysis
-    - run: cov-analyze --dir ${{env.cov_intermediate_dir}} ${{inputs.cov_analysis_params}}
+    - if: ${{inputs.cov_analysis_mode == 'full'}}
+      run: cov-analyze --dir ${{env.cov_intermediate_dir}} ${{inputs.cov_analysis_params}}
       shell: bash
-    - if: ${{env.cov_output_format == 'json' }}
+    - if: ${{inputs.cov_analysis_mode == 'incremental'}}
+      run: |
+        export mod_files=$(curl -H "Accept: application/vnd.github+json" -H "Authorization: Bearer ${{inputs.github_access_token}}" ${{env.GITHUB_APIURL}}/${{github.repository}}/commits/${{github.sha}} | jq .files | jq -r '.[] | .filename' | tr "\r\n" " ")
+        if [ -z $mod_files ]; then echo "No changed files that pass the filter. Exiting"; exit 0; fi
+        cov-run-desktop --dir ${{env.cov_intermediate_dir}} ${{inputs.cov_incremental_analysis_params}} --url="${{env.cov_url}}" --stream="${{env.stream}}" --user="${{env.cov_username}}" --password="${{env.cov_password}}" --json-output-v10=${{env.cov_output}} $mod_files
+      shell: bash
+    - if: ${{env.cov_output_format == 'json' && inputs.cov_analysis_mode != 'incremental'}}
       run: cov-format-errors --dir ${{env.cov_intermediate_dir}} --json-output-v10 ${{env.cov_output}}
       shell: bash
     - if: ${{env.cov_output_format == 'html' }}
       run: cov-format-errors --dir ${{env.cov_intermediate_dir}} --html-output ${{env.cov_output}}
       shell: bash
-    - if: ${{env.cov_output_format == 'sarif' }}
+    - if: ${{env.cov_output_format == 'sarif' && inputs.cov_analysis_mode == 'incremental'}}
       run: cov-format-errors --dir ${{env.cov_intermediate_dir}} --json-output-v10 ${{github.workspace}}/coverity_results.json
       shell: bash
     - if: ${{env.cov_output_format == 'sarif' }}
