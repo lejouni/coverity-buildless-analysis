@@ -97,8 +97,9 @@ runs:
         log_level: ${{inputs.log_level}}
         inputfile: ${{github.workspace}}/coverity_results.json
         outputfile: ${{env.cov_output}}
-    # Commit and that is done with coverity-commit-checker -action.
-    - name: Coverity Commit phase
+    # Commit and that is done with coverity-commit-checker -action. In incremental case, we don't run commit phase -> results are available only locally. 
+    - if: ${{inputs.cov_analysis_mode != 'incremental'}}
+      name: Coverity Commit phase
       uses: lejouni/coverity-commit-checker@v5.6.2
       with:
         project: ${{env.project}}
