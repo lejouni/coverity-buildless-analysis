@@ -1,4 +1,3 @@
-#TODO:  - Add support for incremental analysis by using cov-run-desktop command. (separate action?)
 name: "Coverity Analsysis by using cov-capture as capture command."
 description: "Will analyze the source code with Coverity Connect."
 author: Jouni Lehto
