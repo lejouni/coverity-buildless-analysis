@@ -48,6 +48,9 @@ These key-value pairs must be in environment values and are accessed with **${{e
 | cov_output_format | ${{env.cov_output_format}} | Output format (html, sarif or json) |
 | cov_output | ${{env.cov_output}} | Output file with full path and if output format is html then this must the folder where html will be created |
 
+## Dependencies
+This action is using [lejouni/coverity-sarif-formatter](https://github.com/lejouni/coverity-sarif-formatter) action to create sarif format output, if that is requested.
+
 ## Usage examples
 Run the Coverity full buildless analysis with source mode.
 ```yaml
