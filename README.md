@@ -56,13 +56,13 @@ Run the Coverity full buildless analysis with source mode.
 ```yaml
     - if: ${{github.event_name == 'pull_request'}}
       name: Build with Maven and Full Analyze with Coverity # This will run the full Coverity Analsysis
-      uses: lejouni/coverity-buildless-analysis@v2.8.29
+      uses: lejouni/coverity-buildless-analysis@v2.8.30
 ```
 Run the Coverity full buildless analysis with project mode.
 ```yaml
     - if: ${{github.event_name == 'pull_request'}}
       name: Build with Maven and Full Analyze with Coverity # This will run the full Coverity Analsysis
-      uses: lejouni/coverity-buildless-analysis@v2.8.29
+      uses: lejouni/coverity-buildless-analysis@v2.8.30
       with:
         cov_capture_mode: project # Options are project, scm, source (default) and config
 ```
@@ -70,7 +70,7 @@ Run the Coverity incremental buildless analysis with project mode.
 ```yaml
     - if: ${{github.event_name == 'push'}}
       name: Build with Maven and Incremental Analyze with Coverity # This will run the incremental Coverity Analsysis
-      uses: lejouni/coverity-buildless-analysis@v2.8.29
+      uses: lejouni/coverity-buildless-analysis@v2.8.30
       with:
         cov_capture_mode: project # Options are project, scm, source (default) and config
         cov_analysis_mode: incremental # Optional, but options are full (default) or incremental
