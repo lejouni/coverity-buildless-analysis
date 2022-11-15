@@ -53,13 +53,13 @@ Run the Coverity full buildless analysis with source mode.
 ```yaml
     - if: ${{github.event_name == 'pull_request'}}
       name: Build with Maven and Full Analyze with Coverity # This will run the full Coverity Analsysis
-      uses: lejouni/coverity-buildless-analysis@v2.8.28
+      uses: lejouni/coverity-buildless-analysis@v2.8.29
 ```
 Run the Coverity full buildless analysis with project mode.
 ```yaml
     - if: ${{github.event_name == 'pull_request'}}
       name: Build with Maven and Full Analyze with Coverity # This will run the full Coverity Analsysis
-      uses: lejouni/coverity-buildless-analysis@v2.8.28
+      uses: lejouni/coverity-buildless-analysis@v2.8.29
       with:
         cov_capture_mode: project # Options are project, scm, source (default) and config
 ```
@@ -67,7 +67,7 @@ Run the Coverity incremental buildless analysis with project mode.
 ```yaml
     - if: ${{github.event_name == 'push'}}
       name: Build with Maven and Incremental Analyze with Coverity # This will run the incremental Coverity Analsysis
-      uses: lejouni/coverity-buildless-analysis@v2.8.28
+      uses: lejouni/coverity-buildless-analysis@v2.8.29
       with:
         cov_capture_mode: project # Options are project, scm, source (default) and config
         cov_analysis_mode: incremental # Optional, but options are full (default) or incremental
@@ -97,7 +97,7 @@ jobs:
         cache: 'maven'
 
     - name: Set up Coverity # This will add Coverity Analysis tools into runner PATH
-      uses: lejouni/setup-coverity-analysis@v2.8.19
+      uses: lejouni/setup-coverity-analysis@v2.8.20
       with:
         cov_version: cov-analysis-linux64-2022.6.1
         cov_url: ${{secrets.COVERITY_SERVER_URL}} # Coverity Connect server URL
@@ -113,13 +113,13 @@ jobs:
 
     - if: ${{github.event_name == 'pull_request'}}
       name: Build with Maven and Full Analyze with Coverity # This will run the full Coverity Analsysis
-      uses: lejouni/coverity-buildless-analysis@v2.8.28
+      uses: lejouni/coverity-buildless-analysis@v2.8.29
       with:
         cov_capture_mode: project # Options are project, scm, source (default) and config
 
     - if: ${{github.event_name == 'push'}}
       name: Build with Maven and Incremental Analyze with Coverity # This will run the incremental Coverity Analsysis
-      uses: lejouni/coverity-buildless-analysis@v2.8.28
+      uses: lejouni/coverity-buildless-analysis@v2.8.29
       with:
         cov_capture_mode: project # Options are project, scm, source (default) and config
         cov_analysis_mode: incremental # Optional, but options are full (default) or incremental
