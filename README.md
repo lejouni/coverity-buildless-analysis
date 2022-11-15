@@ -49,7 +49,8 @@ These key-value pairs must be in environment values and are accessed with **${{e
 | cov_output | ${{env.cov_output}} | Output file with full path and if output format is html then this must the folder where html will be created |
 
 ## Dependencies
-This action is using [lejouni/coverity-sarif-formatter](https://github.com/lejouni/coverity-sarif-formatter) action to create sarif format output, if that is requested.
+- This action is using [lejouni/coverity-sarif-formatter](https://github.com/lejouni/coverity-sarif-formatter) action to create sarif format output, if that is requested.
+- This action is using [lejouni/coverity-commit-checker](https://github.com/lejouni/coverity-commit-checker) action to check is Coverity Connect commit needed or not.
 
 ## Usage examples
 Run the Coverity full buildless analysis with source mode.
