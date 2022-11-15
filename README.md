@@ -4,6 +4,18 @@ This will run all Coverity Analysis phases by using the Coverity buildless captu
 ## Prerequisities
 This Github Action expects that Coverity Analysis tools are in the runner PATH. One way to get Coverity Analysis tools into the runner PATH is to run first the [lejouni/setup-coverity-analysis](https://github.com/lejouni/setup-coverity-analysis) -action.
 
+Coverity buildless capture is supported for following coding languages and for others you have to use build capture [lejouni/coverity-build-analysis](https://github.com/lejouni/coverity-build-analysis)
+| Language | Language identifier |
+|---------|----------|
+| Apex | apex |
+| C# | cs |
+| Java | java |
+| JavaScript | javascript |
+| TypeScript | typescript |
+| PHP | php |
+| Python | python |
+| Ruby | ruby |
+
 ## Available Options
 | Option name | Description | Default value | Required |
 |----------|----------|---------|----------|
@@ -85,7 +97,7 @@ jobs:
         cache: 'maven'
 
     - name: Set up Coverity # This will add Coverity Analysis tools into runner PATH
-      uses: lejouni/setup-coverity-analysis@v2.8.18
+      uses: lejouni/setup-coverity-analysis@v2.8.19
       with:
         cov_version: cov-analysis-linux64-2022.6.1
         cov_url: ${{secrets.COVERITY_SERVER_URL}} # Coverity Connect server URL
