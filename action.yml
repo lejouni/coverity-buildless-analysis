@@ -14,15 +14,15 @@ inputs:
     required: false
   force_commit:
     description: Setting this true, it will do the commit and will not do any checkings.
-    default: "false"
+    default: false
     required: false
   dryrun:
     description: Set this true, if you want to run tests and not to do the commit.
-    default: "false"
+    default: false
     required: false
   break_build:
     description: Set this true, if you want to break the build, if there are new findings.
-    default: "false"
+    default: false
     required: false
   emit_threshold:
     description: With this you can set the emit threshold, the default is 95
