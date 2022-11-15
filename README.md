@@ -37,13 +37,13 @@ These key-value pairs must be in environment values and are accessed with **${{e
 | cov_output | ${{env.cov_output}} | Output file with full path and if output format is html then this must the folder where html will be created |
 
 ## Usage examples
-Run the Coverity full buidless analysis with source mode.
+Run the Coverity full buildless analysis with source mode.
 ```yaml
     - if: ${{github.event_name == 'pull_request'}}
       name: Build with Maven and Full Analyze with Coverity # This will run the full Coverity Analsysis
       uses: lejouni/coverity-buildless-analysis@v2.8.28
 ```
-Run the Coverity full buidless analysis with project mode.
+Run the Coverity full buildless analysis with project mode.
 ```yaml
     - if: ${{github.event_name == 'pull_request'}}
       name: Build with Maven and Full Analyze with Coverity # This will run the full Coverity Analsysis
@@ -51,7 +51,7 @@ Run the Coverity full buidless analysis with project mode.
       with:
         cov_capture_mode: project # Options are project, scm, source (default) and config
 ```
-Run the Coverity incremental buidless analysis with project mode.
+Run the Coverity incremental buildless analysis with project mode.
 ```yaml
     - if: ${{github.event_name == 'push'}}
       name: Build with Maven and Incremental Analyze with Coverity # This will run the incremental Coverity Analsysis
