@@ -10,7 +10,7 @@ inputs:
     default: DEBUG
     required: false
   teams_webhook_url:
-    description: Microsoft Teams WebHook URL. By giving this, the Teams notification is activated
+    description: Microsoft Teams WebHook URL. By giving this, the Teams notification is activated. Works only with full scan.
     required: false
   force_commit:
     description: Setting this true, it will do the commit and will not do any checkings.
